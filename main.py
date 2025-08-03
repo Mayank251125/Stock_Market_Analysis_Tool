@@ -3,6 +3,10 @@ import pandas as pd
 from flask import Flask, render_template, request, jsonify, url_for
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
+# --- ADD THIS CODE ---
+from newsapi import NewsApiClient
+from textblob import TextBlob
+# --- END OF ADDED CODE ---
 import pickle
 import os
 import yfinance as yf
@@ -11,6 +15,11 @@ import decimal
 
 app = Flask(__name__)
 
+
+# --- ADD THIS CODE ---
+# Initialize NewsAPI Client
+newsapi = NewsApiClient(api_key='45e35c6e7d62483cafb700977f31f972')
+# --- END OF ADDED CODE ---
 # --- Load Model ---
 model_path = 'models/google_stock_lstm_model.keras'
 model = None
@@ -78,6 +87,34 @@ def predict_close():
         is_crypto = '-USD' in stock_ticker or stock_ticker in ['BTC', 'ETH', 'ADA', 'BNB', 'SOL', 'XRP', 'DOGE', 'SHIB', 'DOT', 'LINK']
         required_timesteps = 60
         chart_period = '100d'
+
+# --- ADD THIS CODE ---
+        # --- Sentiment Analysis Section ---
+        sentiment_data = {'score': 0, 'label': "Neutral"}
+        try:
+            print(f"Fetching news for {stock_ticker}...")
+            # Fetch news articles related to the stock ticker
+            articles = newsapi.get_everything(q=stock_ticker, language='en', sort_by='relevancy', page_size=100)
+            
+            # Calculate sentiment for each article title
+            sentiments = [TextBlob(article['title']).sentiment.polarity for article in articles['articles'] if article['title']]
+            
+            # Calculate the average sentiment
+            if sentiments:
+                average_sentiment = sum(sentiments) / len(sentiments)
+                sentiment_data['score'] = f"{average_sentiment:.3f}"
+                if average_sentiment > 0.1:
+                    sentiment_data['label'] = "Bullish 🐂"
+                elif average_sentiment < -0.1:
+                    sentiment_data['label'] = "Bearish 🐻"
+            print(f"Sentiment analysis for {stock_ticker}: Score={sentiment_data['score']} ({sentiment_data['label']})")
+
+        except Exception as e:
+            print(f"Could not fetch or process news for {stock_ticker}: {e}")
+            sentiment_data['label'] = "Unavailable"
+        # --- End of Sentiment Analysis Section ---
+# --- END OF ADDED CODE ---
+
         try:
             fetch_period = '120d'
             stock_data_full = yf.download(stock_ticker, period=fetch_period, interval='1d')
@@ -149,7 +186,10 @@ def predict_close():
             },
             'is_crypto': is_crypto,
             'real_time_crypto_data': real_time_crypto_data,
-            'real_time_stock_data': real_time_stock_data
+            'real_time_stock_data': real_time_stock_data,
+# --- ADD THIS LINE ---
+            'sentiment': sentiment_data
+# --- END OF ADDED LINE ---
         })
     return render_template('stock.html')
 if __name__ == '__main__':

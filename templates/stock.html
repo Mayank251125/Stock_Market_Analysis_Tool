@@ -36,6 +36,29 @@
         .loading-text {
             color: #333; font-size: 1.3em; font-weight: bold; vertical-align: middle;
         }
+        /* --- ADD THIS CODE --- */
+        .sentiment-result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border-left: 5px solid #0056b3;
+            border-radius: 8px;
+            text-align: left;
+        }
+        .sentiment-result h3 {
+            font-size: 1.4em;
+            color: #0056b3;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        .sentiment-result p {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+        /* --- END OF ADDED CODE --- */
+ 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -45,6 +68,7 @@
             border-radius: 50%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             object-fit: cover;
         }
+        
     </style>
 </head>
 <body>
@@ -61,6 +85,11 @@
             <span class="loading-text">Predicting...</span>
         </div>
         <div id="prediction" class="prediction-result"></div>
+
+        <div id="sentiment-container" class="sentiment-result" style="display:none;">
+            <h3>Market Sentiment</h3>
+            <p id="sentiment-label">--</p>
+        </div>
         <div id="realtimeCryptoInfo" class="realtime-data-section" style="display:none;">
             <h2>Live Crypto Price</h2>
             <div class="realtime-data-item">Current Price: <span id="cryptoCurrentPrice"></span></div>
@@ -90,7 +119,13 @@
             document.getElementById("companyInfo").style.display = 'none'; 
             document.querySelector(".chart-container").style.display = 'none';
             document.getElementById("realtimeCryptoInfo").style.display = 'none';
-            document.getElementById("realtimeStockInfo").style.display = 'none';
+           document.getElementById("realtimeStockInfo").style.display = 'none';
+            document.getElementById("loading").style.display = 'block';
+
+            // --- ADD THIS LINE ---
+            document.getElementById("sentiment-container").style.display = 'none';
+
+            var form = document.getElementById('stockForm');
             document.getElementById("loading").style.display = 'block';
             var form = document.getElementById('stockForm');
             var formData = new FormData(form);
@@ -111,7 +146,16 @@
                             const response = JSON.parse(xhr.responseText);
                             console.log("Full Response:", response);
                             // FIXED: Displays the raw number from the backend
+                            // This line already exists in your file
                             document.getElementById("prediction").innerHTML = "Predicted Next Day's Open Price: " + response.prediction.toFixed(2);
+
+                            // --- ADD THIS CODE ---
+                            if (response.sentiment && response.sentiment.label) {
+                                document.getElementById("sentiment-label").innerText = response.sentiment.label;
+                                document.getElementById("sentiment-container").style.display = "block";
+                            }
+                            // --- END OF ADDED CODE ---
+                            
                             const realTimeCryptoData = response.real_time_crypto_data;
                             const realTimeStockData = response.real_time_stock_data; 
                             const isCrypto = response.is_crypto;

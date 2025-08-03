@@ -94,6 +94,7 @@ input[type="text"]:focus {
 
 /* --- New Styles for Features --- */
 
+
 .loading-indicator {
     display: flex;
     flex-direction: column;
