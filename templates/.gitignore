@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.Python
+env/
+venv/
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
+
+# Keras/TensorFlow models (optional, if you want to rebuild on deployment)
+# If you have very large models, you might need to use Git LFS or re-train on deployment.
+# For now, we'll assume they are small enough to be included.
+
+# Data (optional, if your data is very large or sensitive)
+# If your CSVs are large, you might want to exclude them and fetch them dynamically.
+# For now, we'll assume they are small enough to be included.

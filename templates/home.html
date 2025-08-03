@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Predictor</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Stock Price Predictor</h1>
+        <p>Use this tool to predict stock prices based on historical data and explore our analysis notebooks.</p>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('predict_close') }}">Stock Price Prediction</a></li>
+            </ul>
+        </nav>
+
+        <div class="company-list-section">
+            <h2>Popular Global Stock Tickers</h2>
+            <div class="company-grid">
+                <div class="company-item"><strong>Apple Inc.</strong> (AAPL)</div>
+                <div class="company-item"><strong>Microsoft Corp.</strong> (MSFT)</div>
+                <div class="company-item"><strong>Amazon.com Inc.</strong> (AMZN)</div>
+                <div class="company-item"><strong>Alphabet Inc.</strong> (GOOG)</div>
+                <div class="company-item"><strong>Meta Platforms Inc.</strong> (META)</div>
+                <div class="company-item"><strong>Tesla Inc.</strong> (TSLA)</div>
+                <div class="company-item"><strong>NVIDIA Corp.</strong> (NVDA)</div>
+                <div class="company-item"><strong>Ford Motor Co.</strong> (F)</div>
+            </div>
+        </div>
+
+        <div class="company-list-section">
+            <h2>Popular Indian Stock Tickers</h2>
+            <div class="company-grid">
+                <div class="company-item"><strong>Reliance Industries</strong> (RELIANCE.NS)</div>
+                <div class="company-item"><strong>Tata Consultancy Services</strong> (TCS.NS)</div>
+                <div class="company-item"><strong>Infosys</strong> (INFY.NS)</div>
+                <div class="company-item"><strong>State Bank of India</strong> (SBIN.NS)</div>
+                <div class="company-item"><strong>Bharti Airtel</strong> (BHARTIARTL.NS)</div>
+                <div class="company-item"><strong>Nifty 50</strong> (^NSEI)</div>
+                <div class="company-item"><strong>Sensex</strong> (^BSESN)</div>
+                <div class="company-item"><strong>BSE Ltd</strong> (BSE.NS)</div>
+            </div>
+        </div>
+
+        <div class="company-list-section">
+            <h2>Popular Cryptocurrency Tickers</h2>
+            <div class="company-grid">
+                <div class="company-item"><strong>Bitcoin</strong> (BTC-USD)</div>
+                <div class="company-item"><strong>Ethereum</strong> (ETH-USD)</div>
+                <div class="company-item"><strong>Ripple</strong> (XRP-USD)</div>
+                <div class="company-item"><strong>Solana</strong> (SOL-USD)</div>
+                <div class="company-item"><strong>Cardano</strong> (ADA-USD)</div>
+                <div class="company-item"><strong>Dogecoin</strong> (DOGE-USD)</div>
+                <div class="company-item"><strong>Litecoin</strong> (LTC-USD)</div>
+                <div class="company-item"><strong>Polkadot</strong> (DOT-USD)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

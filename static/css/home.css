@@ -1,0 +1,115 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f8ff; /* Light blue background */
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px; /* Adjusted for potentially wider content */
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #003366; /* Dark blue for heading */
+    font-size: 2.5em;
+}
+
+p {
+    color: #555; /* Dark gray for paragraph */
+    font-size: 1.2em;
+}
+
+nav {
+    margin-top: 20px;
+    background-color: #0066cc; /* Blue background for nav */
+    padding: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Make the list items a flex container */
+    justify-content: center; /* Center the items horizontally */
+    flex-wrap: wrap; /* Allow items to wrap to the next line on smaller screens */
+}
+
+nav li {
+    margin: 0 15px; /* Spacing between horizontal items */
+    padding: 5px 0; /* Add some vertical padding */
+}
+
+nav a {
+    text-decoration: none;
+    color: #ffffff; /* White link color for better contrast */
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+nav a:hover {
+    background-color: #004999; /* Darker blue on hover */
+    color: #e0f2f7; /* Slightly lighter text on hover */
+}
+
+/* Styles for the company/crypto lists below */
+.company-list-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #e0f2f7; /* Slightly darker blue background */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.company-list-section h2 {
+    color: #003366;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 15px;
+    text-align: left;
+}
+
+.company-item {
+    background-color: #ffffff;
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: 1px solid #cce7ed;
+    font-size: 1em;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.company-item strong {
+    color: #0056b3; /* Darker blue for company names */
+}
+
+/* Basic responsiveness for smaller screens */
+@media (max-width: 600px) {
+    .company-grid {
+        grid-template-columns: 1fr; /* Stack items on small screens */
+    }
+    .container {
+        padding: 15px;
+    }
+    nav ul {
+        flex-direction: column; /* Stack nav items vertically on small screens */
+        align-items: center; /* Center them */
+    }
+    nav li {
+        margin: 5px 0; /* Adjust margin for vertical stacking */
+    }
+}
