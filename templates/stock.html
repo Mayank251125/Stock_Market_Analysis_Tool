@@ -5,189 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/stock.css') }}">
     <title>Stock Price Prediction</title>
-    <!-- Chart.js CDN for plotting -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Styles for real-time crypto display on stock page */
-        .realtime-data-section { /* Combined style for both crypto and stock */
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa; /* Light grey background */
-            border-radius: 8px;
-            text-align: left;
-            border: 1px solid #e9ecef;
+        /* (styles remain the same) */
+        .realtime-data-section {
+            margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;
+            text-align: left; border: 1px solid #e9ecef;
         }
-        .realtime-data-section h2 { /* Combined heading style */
-            color: #0056b3;
-            font-size: 1.5em;
-            margin-bottom: 10px;
+        .realtime-data-section h2 {
+            color: #0056b3; font-size: 1.5em; margin-bottom: 10px;
         }
-        .realtime-data-item { /* Combined item style */
-            font-size: 1.1em;
-            margin-bottom: 5px;
+        .realtime-data-item {
+            font-size: 1.1em; margin-bottom: 5px;
         }
-        .realtime-data-item strong { /* Combined strong style */
+        .realtime-data-item strong {
             color: #333;
         }
-        .price-up {
-            color: #28a745; /* Green for positive change */
-            font-weight: bold;
-        }
-        .price-down {
-            color: #dc3545; /* Red for negative change */
-            font-weight: bold;
-        }
-        .price-neutral {
-            color: #6c757d; /* Grey for no change / default */
-        }
-
-        /* Styles for the new loading spinner */
+        .price-up { color: #28a745; font-weight: bold; }
+        .price-down { color: #dc3545; font-weight: bold; }
+        .price-neutral { color: #6c757d; }
         .loading-indicator {
-            display: none; /* Hidden by default */
-            margin: 20px auto;
-            text-align: center;
+            display: none; margin: 20px auto; text-align: center;
         }
-
         .spinner {
-            border: 6px solid #f3f3f3; /* Light grey background for the border */
-            border-top: 6px solid #3498db; /* Blue top part for a two-tone effect */
-            border-radius: 50%;
-            width: 50px; /* Slightly larger */
-            height: 50px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 15px; /* More spacing */
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Subtle blue glow */
+            border: 6px solid #f3f3f3; border-top: 6px solid #3498db;
+            border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;
+            display: inline-block; vertical-align: middle; margin-right: 15px;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
-
         .loading-text {
-            color: #333; /* Darker text */
-            font-size: 1.3em; /* Slightly larger text */
-            font-weight: bold; /* Bolder text */
-            vertical-align: middle;
+            color: #333; font-size: 1.3em; font-weight: bold; vertical-align: middle;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* New styles for the logo */
         .app-logo {
-            display: block; /* Makes it a block element to center with margin */
-            margin: 0 auto 20px auto; /* Centers horizontally, adds bottom margin */
-            width: 120px; /* Adjust size as needed */
-            height: 120px;
-            border-radius: 50%; /* Makes it circular if your image supports it */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            object-fit: cover; /* Ensures image covers the area without distortion */
+            display: block; margin: 0 auto 20px auto; width: 120px; height: 120px;
+            border-radius: 50%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- New Logo Added -->
         <img src="https://placehold.co/120x120/0056b3/ffffff?text=Stock" alt="Stock App Logo" class="app-logo">
         <h1>Stock Price Prediction</h1>
         <form id="stockForm" method="post" onsubmit="send_data(event)">
             <label for="stock_ticker">Stock Ticker (e.g., ^NSEI, GOOG, BTC-USD)</label>
             <input type="text" id="stock_ticker" name="stock_ticker" required placeholder="^NSEI, GOOG, MSFT, BTC-USD">
-            
             <button type="submit" class="btn">Predict Next Day's Open Price</button>
         </form>
-
         <div id="loading" class="loading-indicator">
             <div class="spinner"></div>
             <span class="loading-text">Predicting...</span>
         </div>
-
         <div id="prediction" class="prediction-result"></div>
-
-        <!-- Real-time Crypto Info Section (display:none by default) -->
         <div id="realtimeCryptoInfo" class="realtime-data-section" style="display:none;">
             <h2>Live Crypto Price</h2>
             <div class="realtime-data-item">Current Price: <span id="cryptoCurrentPrice"></span></div>
             <div class="realtime-data-item">24hr Change: <span id="crypto24hrChange"></span></div>
         </div>
-
-        <!-- Real-time Stock Info Section (display:none by default) -->
         <div id="realtimeStockInfo" class="realtime-data-section" style="display:none;">
             <h2>Live Stock Price</h2>
             <div class="realtime-data-item">Current Price: <span id="stockCurrentPrice"></span></div>
             <div class="realtime-data-item">Daily Change: <span id="stockDailyChange"></span></div>
         </div>
-
-
-        <!-- Company Information Section -->
         <div id="companyInfo" class="company-info-section" style="display:none;">
             <h2>Company Information</h2>
             <p><strong>Name:</strong> <span id="companyName"></span> (<span id="companySymbol"></span>)</p>
             <p><strong>Market Cap:</strong> <span id="companyMarketCap"></span></p>
             <p><strong>Volume:</strong> <span id="companyVolume"></span></p>
         </div>
-
-        <!-- Chart Section -->
         <div class="chart-container" style="display:none;">
             <h2>Historical Price Chart</h2>
             <canvas id="priceChart"></canvas>
         </div>
     </div>
-
     <script>
         let myChart = null;
-
         function send_data(event) {
             event.preventDefault();
-
-            // Hide all dynamic sections and show loading
             document.getElementById("prediction").innerHTML = "";
             document.getElementById("companyInfo").style.display = 'none'; 
             document.querySelector(".chart-container").style.display = 'none';
             document.getElementById("realtimeCryptoInfo").style.display = 'none';
             document.getElementById("realtimeStockInfo").style.display = 'none';
             document.getElementById("loading").style.display = 'block';
-
             var form = document.getElementById('stockForm');
             var formData = new FormData(form);
             var xhr = new XMLHttpRequest();
-            
             const apiUrl = window.location.origin + '/predict_close';
-
             if (window.location.protocol === 'file:') {
                 document.getElementById("prediction").innerHTML = "Prediction Error: Please run the Flask server (`python main.py`) and access via `http://127.0.0.1:5000/predict_close`.";
                 document.getElementById("loading").style.display = 'none';
                 return;
             }
-
             xhr.open('POST', apiUrl, true);
             xhr.setRequestHeader('Accept', 'application/json');
-
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
                     document.getElementById("loading").style.display = 'none';
-
                     if (xhr.status === 200) {
                         try {
                             const response = JSON.parse(xhr.responseText);
-                            console.log("Full Response:", response); // Log the full response
-                            console.log("Is Crypto (from backend):", response.is_crypto); // Log is_crypto flag
-                            console.log("Real-time Stock Data (from backend):", response.real_time_stock_data); // Log real_time_stock_data
-                            console.log("Real-time Crypto Data (from backend):", response.real_time_crypto_data); // Log real_time_crypto_data
-
-
-                            document.getElementById("prediction").innerHTML = "Predicted Next Day's Open Price: " + response.prediction;
-
-                            // Display Real-time Crypto Info if available
+                            console.log("Full Response:", response);
+                            // FIXED: Displays the raw number from the backend
+                            document.getElementById("prediction").innerHTML = "Predicted Next Day's Open Price: " + response.prediction.toFixed(2);
                             const realTimeCryptoData = response.real_time_crypto_data;
                             const realTimeStockData = response.real_time_stock_data; 
-                            const isCrypto = response.is_crypto; // Get is_crypto flag from backend
-
+                            const isCrypto = response.is_crypto;
                             if (realTimeCryptoData) {
                                 document.getElementById("realtimeCryptoInfo").style.display = 'block';
                                 document.getElementById("realtimeStockInfo").style.display = 'none'; 
-                                
-                                document.getElementById("cryptoCurrentPrice").textContent = `$${realTimeCryptoData.current_price.toFixed(2)}`;
+                                // FIXED: Displays the raw number from the backend with toFixed(2)
+                                document.getElementById("cryptoCurrentPrice").textContent = realTimeCryptoData.current_price.toFixed(2);
                                 const changeElement = document.getElementById("crypto24hrChange");
                                 if (realTimeCryptoData.change_24hr !== undefined && realTimeCryptoData.change_24hr !== null) {
                                     const changeText = `${realTimeCryptoData.change_24hr.toFixed(2)}%`;
@@ -204,11 +136,11 @@
                                     changeElement.textContent = 'N/A';
                                     changeElement.className = 'price-neutral';
                                 }
-                            } else if (realTimeStockData) { // Display Real-time Stock Info if available
+                            } else if (realTimeStockData) {
                                 document.getElementById("realtimeStockInfo").style.display = 'block';
                                 document.getElementById("realtimeCryptoInfo").style.display = 'none'; 
-
-                                document.getElementById("stockCurrentPrice").textContent = `$${realTimeStockData.current_price.toFixed(2)}`;
+                                // FIXED: Displays the raw number from the backend with toFixed(2)
+                                document.getElementById("stockCurrentPrice").textContent = realTimeStockData.current_price.toFixed(2);
                                 const changeElement = document.getElementById("stockDailyChange");
                                 if (realTimeStockData.change_24hr !== undefined && realTimeStockData.change_24hr !== null) {
                                     const changeText = `${realTimeStockData.change_24hr.toFixed(2)}%`;
@@ -226,13 +158,8 @@
                                     changeElement.className = 'price-neutral';
                                 }
                             }
-
-
-                            // Display Company Information (always show if valid, regardless of crypto/stock)
                             const companyInfo = response.company_info;
                             const companyInfoSection = document.getElementById("companyInfo");
-                            
-                            // Check if companyInfo has enough valid data to be displayed
                             if (companyInfo && companyInfo.longName !== 'N/A' && companyInfo.longName !== null) {
                                 companyInfoSection.style.display = 'block';
                                 document.getElementById("companyName").textContent = String(companyInfo.longName);
@@ -240,28 +167,21 @@
                                 document.getElementById("companyMarketCap").textContent = String(companyInfo.marketCap);
                                 document.getElementById("companyVolume").textContent = String(companyInfo.volume);
                             } else {
-                                companyInfoSection.style.display = 'none'; // Hide if no valid company info
+                                companyInfoSection.style.display = 'none';
                             }
-
-                            // Render Chart
                             const chartData = response.chart_data;
-                            console.log("Chart Data Labels:", chartData.labels);
-                            console.log("Chart Data Prices:", chartData.prices);
-
                             if (chartData.labels && chartData.labels.length > 0 && chartData.prices && chartData.prices.length > 0) {
                                 document.querySelector(".chart-container").style.display = 'block';
                                 const ctx = document.getElementById('priceChart').getContext('2d');
-
                                 if (myChart) {
                                     myChart.destroy();
                                 }
-
                                 myChart = new Chart(ctx, {
                                     type: 'line',
                                     data: {
                                         labels: chartData.labels,
                                         datasets: [{
-                                            label: 'Close Price (USD)',
+                                            label: 'Close Price',
                                             data: chartData.prices,
                                             borderColor: 'rgb(75, 192, 192)',
                                             tension: 0.1,
@@ -275,17 +195,11 @@
                                             x: {
                                                 type: 'category',
                                                 labels: chartData.labels,
-                                                title: {
-                                                    display: true,
-                                                    text: 'Date'
-                                                }
+                                                title: { display: true, text: 'Date' }
                                             },
                                             y: {
                                                 beginAtZero: false,
-                                                title: {
-                                                    display: true,
-                                                    text: 'Price (USD)'
-                                                }
+                                                title: { display: true, text: 'Price' }
                                             }
                                         }
                                     }
@@ -294,7 +208,6 @@
                                 console.log("No valid chart data to display.");
                                 document.querySelector(".chart-container").style.display = 'none';
                             }
-
                         } catch (e) {
                             document.getElementById("prediction").innerHTML = "Prediction Error: Failed to parse server response. " + e.message;
                             console.error("Error parsing JSON response:", e);
