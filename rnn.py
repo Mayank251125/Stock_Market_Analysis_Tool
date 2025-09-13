@@ -17,7 +17,7 @@ training_set_scaled = sc.fit_transform(training_set)
 # Creating a data structure with 60 timesteps and 1 output
 X_train = []
 y_train = []
-required_timesteps = 60 # Define required_timesteps for clarity
+required_timesteps = 90 # Define required_timesteps for clarity
 
 # Ensure loop range is valid
 if len(training_set_scaled) >= required_timesteps:
@@ -27,7 +27,8 @@ if len(training_set_scaled) >= required_timesteps:
     X_train, y_train = np.array(X_train), np.array(y_train)
 else:
     print(f"Error: Training set has only {len(training_set_scaled)} samples, but requires at least {required_timesteps} for timesteps.")
-    X_train, y_train = np.array([]), np.array([]) # Initialize as empty arrays to prevent errors later
+    X_train, y_train = np.array([]), np.array([]) 
+# Initialize as empty arrays to prevent errors later
 
 # Reshaping
 if X_train.size > 0: # Only reshape if X_train is not empty

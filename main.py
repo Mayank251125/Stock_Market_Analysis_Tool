@@ -3,10 +3,8 @@ import pandas as pd
 from flask import Flask, render_template, request, jsonify, url_for
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
-# --- ADD THIS CODE ---
 from newsapi import NewsApiClient
 from textblob import TextBlob
-# --- END OF ADDED CODE ---
 import pickle
 import os
 import yfinance as yf
@@ -15,12 +13,8 @@ import decimal
 
 app = Flask(__name__)
 
-
-# --- ADD THIS CODE ---
-# Initialize NewsAPI Client
 newsapi = NewsApiClient(api_key='45e35c6e7d62483cafb700977f31f972')
-# --- END OF ADDED CODE ---
-# --- Load Model ---
+
 model_path = 'models/google_stock_lstm_model.keras'
 model = None
 
@@ -85,7 +79,7 @@ def predict_close():
             return jsonify("Error: Prediction model not loaded on server. Please check server logs."), 500
         stock_ticker = request.form['stock_ticker'].upper()
         is_crypto = '-USD' in stock_ticker or stock_ticker in ['BTC', 'ETH', 'ADA', 'BNB', 'SOL', 'XRP', 'DOGE', 'SHIB', 'DOT', 'LINK']
-        required_timesteps = 60
+        required_timesteps = 90
         chart_period = '100d'
 
 # --- ADD THIS CODE ---
@@ -189,6 +183,8 @@ def predict_close():
             'real_time_stock_data': real_time_stock_data,
 # --- ADD THIS LINE ---
             'sentiment': sentiment_data
+
+            
 # --- END OF ADDED LINE ---
         })
     return render_template('stock.html')
