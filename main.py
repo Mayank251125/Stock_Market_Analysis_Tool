@@ -183,8 +183,6 @@ def predict_close():
             'real_time_stock_data': real_time_stock_data,
 # --- ADD THIS LINE ---
             'sentiment': sentiment_data
-
-            
 # --- END OF ADDED LINE ---
         })
     return render_template('stock.html')
