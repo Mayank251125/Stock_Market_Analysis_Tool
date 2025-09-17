@@ -1,4 +1,5 @@
 ```markdown
+[View Project Demo Video](https://drive.google.com/file/d/1Hg1ZxplE20vCEb0p8oXF31_iKRYuH7f1/view?usp=sharing)
 # Stock and Cryptocurrency Price Prediction Web App
 
 A comprehensive web application that predicts stock and cryptocurrency prices using LSTM neural networks, featuring real-time market data, historical charts, and sentiment analysis.
