@@ -131,7 +131,7 @@ Visit `http://127.0.0.1:5000` in your browser.
 ### Architecture
 - **Type**: Recurrent Neural Network (RNN)
 - **Layers**: Long Short-Term Memory (LSTM) layers
-- **Input**: Historical closing prices (60-day window)
+- **Input**: Historical closing prices (90-day window)
 - **Output**: Next day's predicted closing price
 
 ### Training Data
