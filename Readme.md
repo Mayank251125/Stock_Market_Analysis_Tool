@@ -1,4 +1,6 @@
+[View Project Demo Video](https://drive.google.com/file/d/1Hg1ZxplE20vCEb0p8oXF31_iKRYuH7f1/view?usp=sharing)
 ```markdown
+
 # Stock and Cryptocurrency Price Prediction Web App
 
 A comprehensive web application that predicts stock and cryptocurrency prices using LSTM neural networks, featuring real-time market data, historical charts, and sentiment analysis.
@@ -129,7 +131,7 @@ Visit `http://127.0.0.1:5000` in your browser.
 ### Architecture
 - **Type**: Recurrent Neural Network (RNN)
 - **Layers**: Long Short-Term Memory (LSTM) layers
-- **Input**: Historical closing prices (60-day window)
+- **Input**: Historical closing prices (90-day window)
 - **Output**: Next day's predicted closing price
 
 ### Training Data
