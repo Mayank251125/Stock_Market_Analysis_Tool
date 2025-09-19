@@ -13,7 +13,7 @@ import decimal
 
 app = Flask(__name__)
 
-newsapi = NewsApiClient(api_key='45e35c6e7d62483cafb700977f31f972')
+newsapi = NewsApiClient(api_key='Enter your API Key')
 
 model_path = 'models/google_stock_lstm_model.keras'
 model = None
